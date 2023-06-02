@@ -103,20 +103,6 @@ module ScheduleHelper
 
     JSON.parse(response.body)['DegreePlan']['Terms']
         .delete_if { _1['PlannedCourses'].nil? || _1['PlannedCourses'].empty? }
-        .map do |term|
-      term.slice('Code', 'Description',
-                 'PlannedCourses').tap do |term|
-        term['PlannedCourses'].map! do |course|
-          course.slice('Section', 'TitleDisplay').tap do |course|
-            course['Section'].slice!('PlannedMeetings', 'Faculty')
-            course['Section']['PlannedMeetings'].map! do |meeting|
-              meeting.slice('Days', 'StartTime', 'EndTime', 'MeetingLocation',
-                            'StartDateString', 'EndDateString')
-            end
-          end
-        end
-      end
-    end
   end
 
   def generate_ical(json, term)
