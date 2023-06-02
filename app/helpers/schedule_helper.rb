@@ -69,6 +69,15 @@ module ScheduleHelper
       end
     end
   end
+
+  class Error
+    attr_reader :message
+
+    def initialize(message)
+      @message = message
+    end
+  end
+
   WEEKDAYS = %w[SU MO TU WE TH FR SA].freeze
 
   def get_json(username, password)
@@ -89,7 +98,10 @@ module ScheduleHelper
                              'Content-Type' => 'application/x-www-form-urlencoded',
                            })
 
-    user_id = response.body.match(/var currentUserId = "(\d+)"/)[1]
+    match = response.body.match(/var currentUserId = "(\d+)"/)
+    return Error.new(t(:login_failed)) if match.nil?
+
+    user_id = match[1]
 
     ajax_headers = {
       '__RequestVerificationToken' => Nokogiri::HTML(response.body).xpath('//input[@name="__RequestVerificationToken"]').first['value'],
@@ -106,7 +118,9 @@ module ScheduleHelper
   end
 
   def generate_ical(json, term)
-    courses = json.filter { _1['Code'] == term }.first['PlannedCourses']
+    courses = json.filter { _1['Code'] == term }.first&.[]('PlannedCourses')
+
+    return Error.new(t(:no_course_found)) if courses.nil? || courses.empty?
 
     tz = { 'tzid' => 'Asia/Shanghai' }
 
@@ -114,6 +128,8 @@ module ScheduleHelper
     cal = Icalendar::Calendar.new
 
     courses.each do |course|
+      next if course.dig('Section', 'PlannedMeetings').nil?
+
       course['Section']['PlannedMeetings'].each do |meeting|
         start_date = Date.strptime(meeting['StartDateString'], '%m/%d/%Y')
         start_date += (meeting['Days'].min - start_date.wday) % 7 # first day of class
@@ -142,6 +158,8 @@ module ScheduleHelper
             a.trigger = '-P0DT0H15M0S' # 1 day before
           end
         end
+      rescue StandardError => e
+        next
       end
     end
 

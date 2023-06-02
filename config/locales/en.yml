@@ -32,3 +32,5 @@
 en:
   login: "Login"
   introduction: "This small tool automatically reads your Kean University class schedule and generates iCalendar files. Please enter your KeanWise username and password below. (Your username will be logged, and the encrypted course selection information will be saved on the server with the key saved on your browser)"
+  no_course_found: "No courses found"
+  login_failed: "Login failed"
