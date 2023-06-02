@@ -1,2 +1,8 @@
-<h1>Schedule#login</h1>
-<p>Find me in app/views/schedule/login.html.erb</p>
+<h1>Login</h1>
+<%= form_with url: schedule_login_path do |form| %>
+  <%= form.label :username %>:
+  <%= form.text_field :username %><br />
+  <%= form.label :password %>:
+  <%= form.password_field :password %><br />
+  <%= form.submit %>
+<% end %>

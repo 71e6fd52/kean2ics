@@ -72,3 +72,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'webdrivers'
 end
+
+gem 'icalendar'
+gem 'nokogiri'
+gem 'activerecord-session_store'

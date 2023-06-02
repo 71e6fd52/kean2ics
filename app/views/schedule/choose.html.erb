@@ -1,0 +1,4 @@
+<h1>Choose term</h1>
+<% session[:data].each do |term| %>
+  <%= link_to "#{term['Code']} #{term['Description']}", controller: 'schedule', action: 'generate', term: term['Code']%><br \>
+<% end %>
