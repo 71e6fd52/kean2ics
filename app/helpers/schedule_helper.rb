@@ -114,8 +114,15 @@ module ScheduleHelper
     )
 
     JSON.parse(response.body)['DegreePlan']['Terms']
-        .delete_if { _1['PlannedCourses'].nil? || _1['PlannedCourses'].empty? }
-        .map { _1.slice('Code', 'Description', 'PlannedCourses') }
+        .reject { _1['PlannedCourses'].nil? || _1['PlannedCourses'].empty? }
+        .map do |term|
+          term['PlannedCourses'].delete_if do |course|
+            course['HasSection'] == false || course['HasRegisteredSection'] == false || course['HasMeetings'] == false ||
+              course['Section'].nil? || course['Section']['PlannedMeetings'].nil? || course['Section']['PlannedMeetings'].empty?
+          end
+          term.slice('Code', 'Description', 'PlannedCourses')
+        end
+        .reject { _1['PlannedCourses'].nil? || _1['PlannedCourses'].empty? }
   end
 
   def generate_ical(json, term)

@@ -76,3 +76,6 @@ end
 gem 'icalendar'
 gem 'nokogiri'
 gem 'activerecord-session_store'
+
+gem 'rubocop', require: false
+gem 'rubocop-rails', require: false
