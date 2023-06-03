@@ -9,4 +9,10 @@ Style/TrailingCommaInArrayLiteral:
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
 Style/ClassAndModuleChildren:
-  EnforcedStyle: compact
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/MultilineBlockChain:
+  Enabled: false
+Lint/MissingCopEnableDirective:
+  Enabled: false

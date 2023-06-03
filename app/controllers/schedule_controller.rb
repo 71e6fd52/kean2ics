@@ -2,20 +2,19 @@
 
 class ScheduleController < ApplicationController
   def login
-    if session[:data].nil?
-    else
-      redirect_to action: 'choose'
-    end
+    return if session[:data].nil?
+
+    redirect_to action: 'choose'
   end
 
   def perform_login
-    data = helpers.get_json(params[:username], params[:password])
-    if data.is_a?(ScheduleHelper::Error)
+    data = Kean.get_json(params[:username], params[:password])
+    if data.is_a?(Kean::Error)
       flash[:error] = data.message
       redirect_to action: 'login'
     else
       session[:data] = data
-      session[:last_update] = Time.now
+      session[:last_update] = Time.current
       redirect_to action: 'choose'
     end
   end
@@ -26,8 +25,8 @@ class ScheduleController < ApplicationController
   end
 
   def generate
-    ical = helpers.generate_ical(session[:data], params[:term])
-    if ical.is_a?(ScheduleHelper::Error)
+    ical = Kean.generate_ical(session[:data], params[:term])
+    if ical.is_a?(Kean::Error)
       flash[:error] = ical.message
       redirect_to action: 'choose'
     else

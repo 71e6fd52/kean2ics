@@ -73,9 +73,10 @@ group :test do
   gem 'webdrivers'
 end
 
+gem 'activerecord-session_store'
+
 gem 'icalendar'
 gem 'nokogiri'
-gem 'activerecord-session_store'
 
 gem 'rubocop', require: false
 gem 'rubocop-rails', require: false
