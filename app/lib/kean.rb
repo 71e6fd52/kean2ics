@@ -160,8 +160,8 @@ module Kean
                        .gsub(/General Education Hall/, 'GEH')
           byday = meeting['Days'].map { WEEKDAYS[_1] }.join(',')
           e.rrule = Icalendar::Values::Recur.new(
-            "FREQ=WEEKLY;UNTIL=#{Date.strptime(meeting['EndDateString'],
-                                               '%m/%d/%Y').strftime('%Y%m%d')};BYDAY=#{byday}",
+            "FREQ=WEEKLY;UNTIL=#{(Date.strptime(meeting['EndDateString'], '%m/%d/%Y') + 1)
+                                      .strftime('%Y%m%d')};BYDAY=#{byday}",
           )
 
           e.alarm do |a|
