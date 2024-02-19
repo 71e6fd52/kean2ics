@@ -158,6 +158,7 @@ module Kean
                        .gsub(/^WKU /, '')
                        .gsub(/Gehekai Hall/, 'GHK')
                        .gsub(/General Education Hall/, 'GEH')
+                       .gsub(/Coll of Math, Sci & Tech/, 'CMST')
           byday = meeting['Days'].map { WEEKDAYS[_1] }.join(',')
           e.rrule = Icalendar::Values::Recur.new(
             "FREQ=WEEKLY;UNTIL=#{(Date.strptime(meeting['EndDateString'], '%m/%d/%Y') + 1)
